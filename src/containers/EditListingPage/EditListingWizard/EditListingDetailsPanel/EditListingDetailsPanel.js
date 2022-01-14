@@ -1,18 +1,20 @@
 import React from 'react';
-import { bool, func, object, string } from 'prop-types';
+import {bool, func, object, oneOf, shape, string} from 'prop-types';
 import classNames from 'classnames';
 
 // Import configs and util modules
-import { FormattedMessage } from '../../../../util/reactIntl';
-import { ensureOwnListing } from '../../../../util/data';
-import { LISTING_STATE_DRAFT } from '../../../../util/types';
+import {FormattedMessage} from '../../../../util/reactIntl';
+import {ensureOwnListing} from '../../../../util/data';
+import {LISTING_STATE_DRAFT} from '../../../../util/types';
 
 // Import shared components
-import { ListingLink } from '../../../../components';
+import {ListingLink} from '../../../../components';
 
 // Import modules from this directory
 import EditListingDetailsForm from './EditListingDetailsForm';
 import css from './EditListingDetailsPanel.module.css';
+import {DEFAULT_SELLER_STATUS, LISTING_PAGE_PARAM_TYPES} from "../../../../util/urlHelpers";
+import {SUPPORTED_TABS} from "../EditListingWizardTab";
 
 const EditListingDetailsPanel = props => {
   const {
@@ -23,6 +25,7 @@ const EditListingDetailsPanel = props => {
     ready,
     onSubmit,
     onChange,
+    params,
     submitButtonText,
     panelUpdated,
     updateInProgress,
@@ -31,16 +34,16 @@ const EditListingDetailsPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
-  const { description, title, publicData } = currentListing.attributes;
+  const {description, title, publicData} = currentListing.attributes;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
   const panelTitle = isPublished ? (
     <FormattedMessage
       id="EditListingDetailsPanel.title"
-      values={{ listingTitle: <ListingLink listing={listing} /> }}
+      values={{listingTitle: <ListingLink listing={listing}/>}}
     />
   ) : (
-    <FormattedMessage id="EditListingDetailsPanel.createListingTitle" />
+    <FormattedMessage id="EditListingDetailsPanel.createListingTitle"/>
   );
 
   return (
@@ -54,14 +57,17 @@ const EditListingDetailsPanel = props => {
           category: publicData.category,
           size: publicData.size,
           brand: publicData.brand,
+          status: publicData.status || DEFAULT_SELLER_STATUS,
+          salePlace: publicData.salePlace,
         }}
+        params={params}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { title, description, category, size, brand } = values;
+          const {title, description, category, size, brand, status, salePlace} = values;
           const updateValues = {
             title: title.trim(),
             description,
-            publicData: { category, size, brand },
+            publicData: {category, size, brand, status, salePlace},
           };
 
           onSubmit(updateValues);
@@ -91,6 +97,9 @@ EditListingDetailsPanel.propTypes = {
 
   // We cannot use propTypes.listing since the listing might be a draft.
   listing: object,
+  params: shape({
+    type: oneOf(LISTING_PAGE_PARAM_TYPES),
+  }),
 
   disabled: bool.isRequired,
   ready: bool.isRequired,

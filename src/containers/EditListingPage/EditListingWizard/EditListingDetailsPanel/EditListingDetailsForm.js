@@ -1,5 +1,5 @@
 import React from 'react';
-import { arrayOf, bool, func, shape, string } from 'prop-types';
+import {arrayOf, bool, func, oneOf, shape, string} from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
 import classNames from 'classnames';
@@ -16,6 +16,17 @@ import { Form, Button, FieldTextInput } from '../../../../components';
 // Import modules from this directory
 import CustomFieldEnum from '../CustomFieldEnum';
 import css from './EditListingDetailsForm.module.css';
+import {getMarketplaceEntities} from "../../../../ducks/marketplaceData.duck";
+import {isScrollingDisabled} from "../../../../ducks/UI.duck";
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {EditListingPageComponent} from "../../EditListingPage";
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_NEW,
+  LISTING_PAGE_PARAM_TYPES, PLATFORMER
+} from "../../../../util/urlHelpers";
+import {SUPPORTED_TABS} from "../EditListingWizardTab";
 
 const TITLE_MAX_LENGTH = 60;
 
@@ -84,6 +95,10 @@ const EditListingDetailsFormComponent = props => (
         </p>
       ) : null;
 
+      const {currentUser, params} = props
+      const userType = currentUser?.attributes?.profile?.metadata?.userType
+      console.log(params);
+
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
@@ -137,6 +152,40 @@ const EditListingDetailsFormComponent = props => (
         })
       );
 
+
+      const statusConfig = findConfigForSelectFilter('status', filterConfig);
+      const statusSchemaType = statusConfig.schemaType;
+      const statusKey = userType === PLATFORMER ? 'options' : 'restrictedOptions'
+      const statuses = statusConfig[statusKey] ? statusConfig[statusKey] : [];
+      const statusLabel = intl.formatMessage({
+        id: 'EditListingDetailsForm.statusLabel',
+      });
+      const statusPlaceholder = intl.formatMessage({
+        id: 'EditListingDetailsForm.statusPlaceholder',
+      });
+
+      const statusRequired = required(
+        intl.formatMessage({
+          id: 'EditListingDetailsForm.statusRequired',
+        })
+      );
+
+      const salePlaceConfig = findConfigForSelectFilter('salePlace', filterConfig);
+      const salePlaceSchemaType = salePlaceConfig.schemaType;
+      const salePlaces = salePlaceConfig.options ? salePlaceConfig.options : [];
+      const salePlaceLabel = intl.formatMessage({
+        id: 'EditListingDetailsForm.salePlaceLabel',
+      });
+      const salePlacePlaceholder = intl.formatMessage({
+        id: 'EditListingDetailsForm.salePlacePlaceholder',
+      });
+
+      const salePlaceRequired = required(
+        intl.formatMessage({
+          id: 'EditListingDetailsForm.salePlaceRequired',
+        })
+      );
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
@@ -171,7 +220,6 @@ const EditListingDetailsFormComponent = props => (
             validate={categoryRequired}
             schemaType={categorySchemaType}
           />
-
           <CustomFieldEnum
             id="size"
             name="size"
@@ -181,7 +229,6 @@ const EditListingDetailsFormComponent = props => (
             validate={sizeRequired}
             schemaType={sizeSchemaType}
           />
-
           <CustomFieldEnum
             id="brand"
             name="brand"
@@ -191,7 +238,25 @@ const EditListingDetailsFormComponent = props => (
             validate={brandRequired}
             schemaType={brandSchemaType}
           />
-
+          <CustomFieldEnum
+            id="status"
+            name="status"
+            options={statuses}
+            label={statusLabel}
+            placeholder={statusPlaceholder}
+            validate={statusRequired}
+            schemaType={statusSchemaType}
+            disabled={userType === 'seller' && params.type === LISTING_PAGE_PARAM_TYPE_DRAFT}
+          />
+          <CustomFieldEnum
+            id="salePlace"
+            name="salePlace"
+            options={salePlaces}
+            label={salePlaceLabel}
+            placeholder={salePlacePlaceholder}
+            validate={salePlaceRequired}
+            schemaType={salePlaceSchemaType}
+          />
           <Button
             className={css.submitButton}
             type="submit"
@@ -206,6 +271,11 @@ const EditListingDetailsFormComponent = props => (
     }}
   />
 );
+
+const mapStateToProps = state => {
+  const { currentUser } = state.user;
+  return {currentUser}
+};
 
 EditListingDetailsFormComponent.defaultProps = {
   className: null,
@@ -222,6 +292,9 @@ EditListingDetailsFormComponent.propTypes = {
   ready: bool.isRequired,
   updated: bool.isRequired,
   updateInProgress: bool.isRequired,
+  params: shape({
+    type: oneOf(LISTING_PAGE_PARAM_TYPES),
+  }),
   fetchErrors: shape({
     createListingDraftError: propTypes.error,
     showListingsError: propTypes.error,
@@ -230,4 +303,11 @@ EditListingDetailsFormComponent.propTypes = {
   filterConfig: propTypes.filterConfig,
 };
 
-export default compose(injectIntl)(EditListingDetailsFormComponent);
+// export default compose(injectIntl)(EditListingDetailsFormComponent);
+export default compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+  )
+)(injectIntl(EditListingDetailsFormComponent));
+

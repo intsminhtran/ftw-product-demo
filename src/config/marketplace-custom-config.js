@@ -56,6 +56,50 @@ export const filters = [
     },
   },
   {
+    id: 'status',
+    label: 'Status',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_status'],
+    config: {
+      // Schema type is enum for SelectSingleFilter
+      schemaType: 'enum',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for the UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        { key: 'draft', label: 'Draft' },
+        { key: 'approved', label: 'Approve' },
+      ],
+      restrictedOptions: [
+        { key: 'draft', label: 'Draft' },
+      ],
+    },
+  },
+  {
+    id: 'salePlace',
+    label: 'SalesPlace',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_sale_place'],
+    config: {
+      // Schema type is enum for SelectSingleFilter
+      schemaType: 'enum',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for the UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        { key: 'marche1', label: 'Marche 1' },
+        { key: 'marche2', label: 'Marche 2' },
+        { key: 'marche3', label: 'Marche 3' },
+      ],
+    },
+  },
+  {
     id: 'size',
     label: 'Size (US)',
     type: 'SelectMultipleFilter',

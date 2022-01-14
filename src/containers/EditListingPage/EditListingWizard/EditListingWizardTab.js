@@ -131,6 +131,7 @@ const EditListingWizardTab = props => {
       className: css.panel,
       errors,
       listing,
+      params,
       onChange,
       panelUpdated: updatedTab === tab,
       updateInProgress,

@@ -5,7 +5,7 @@ import { FieldSelect } from '../../../components';
 import css from './EditListingWizard.module.css';
 
 const CustomFieldEnum = props => {
-  const { name, id, options, label, placeholder, validate, schemaType } = props;
+  const { name, id, options, label, placeholder, validate, schemaType, disabled } = props;
 
   return options && schemaType === 'enum' ? (
     <FieldSelect
@@ -14,6 +14,7 @@ const CustomFieldEnum = props => {
       id={id}
       label={label}
       validate={validate}
+      disabled={disabled}
     >
       <option disabled value="">
         {placeholder}

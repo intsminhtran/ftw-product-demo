@@ -3,6 +3,10 @@ import { types as sdkTypes } from './sdkLoader';
 
 const { LatLng, LatLngBounds } = sdkTypes;
 
+export const PLATFORMER = 'platformer';
+export const SELLER = 'seller';
+export const DEFAULT_SELLER_STATUS = 'draft';
+
 export const LISTING_PAGE_PENDING_APPROVAL_VARIANT = 'pending-approval';
 export const LISTING_PAGE_DRAFT_VARIANT = 'draft';
 
