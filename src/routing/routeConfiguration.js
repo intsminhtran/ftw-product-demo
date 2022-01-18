@@ -27,13 +27,11 @@ const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageLis
 const PasswordChangePage = loadable(() => import(/* webpackChunkName: "PasswordChangePage" */ '../containers/PasswordChangePage/PasswordChangePage'));
 const PasswordRecoveryPage = loadable(() => import(/* webpackChunkName: "PasswordRecoveryPage" */ '../containers/PasswordRecoveryPage/PasswordRecoveryPage'));
 const PasswordResetPage = loadable(() => import(/* webpackChunkName: "PasswordResetPage" */ '../containers/PasswordResetPage/PasswordResetPage'));
-const PaymentMethodsPage = loadable(() => import(/* webpackChunkName: "PaymentMethodsPage" */ '../containers/PaymentMethodsPage/PaymentMethodsPage'));
 const PrivacyPolicyPage = loadable(() => import(/* webpackChunkName: "PrivacyPolicyPage" */ '../containers/PrivacyPolicyPage/PrivacyPolicyPage'));
 const ProfilePage = loadable(() => import(/* webpackChunkName: "ProfilePage" */ '../containers/ProfilePage/ProfilePage'));
 const ProfileSettingsPage = loadable(() => import(/* webpackChunkName: "ProfileSettingsPage" */ '../containers/ProfileSettingsPage/ProfileSettingsPage'));
 const SearchPageWithMap = loadable(() => import(/* webpackChunkName: "SearchPageWithMap" */ /* webpackPrefetch: true */  '../containers/SearchPage/SearchPageWithMap'));
 const SearchPageWithList = loadable(() => import(/* webpackChunkName: "SearchPageWithList" */ /* webpackPrefetch: true */  '../containers/SearchPage/SearchPageWithList'));
-const StripePayoutPage = loadable(() => import(/* webpackChunkName: "StripePayoutPage" */ '../containers/StripePayoutPage/StripePayoutPage'));
 const TermsOfServicePage = loadable(() => import(/* webpackChunkName: "TermsOfServicePage" */ '../containers/TermsOfServicePage/TermsOfServicePage'));
 const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionPage" */ '../containers/TransactionPage/TransactionPage'));
 
@@ -44,12 +42,7 @@ const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePag
 const SearchPage = config.searchPageVariant === 'map' ? SearchPageWithMap : SearchPageWithList;
 const ListingPage = config.listingPageLayout === 'full-image' ? ListingPageFullImage : ListingPageHeroImage;
 
-export const ACCOUNT_SETTINGS_PAGES = [
-  'ContactDetailsPage',
-  'PasswordChangePage',
-  'StripePayoutPage',
-  'PaymentMethodsPage',
-];
+export const ACCOUNT_SETTINGS_PAGES = ['ContactDetailsPage', 'PasswordChangePage'];
 
 // https://en.wikipedia.org/wiki/Universally_unique_identifier#Nil_UUID
 const draftId = '00000000-0000-0000-0000-000000000000';
@@ -267,30 +260,6 @@ const routeConfiguration = () => {
       auth: true,
       authPage: 'LoginPage',
       component: PasswordChangePage,
-    },
-    {
-      path: '/account/payments',
-      name: 'StripePayoutPage',
-      auth: true,
-      authPage: 'LoginPage',
-      component: StripePayoutPage,
-      loadData: pageDataLoadingAPI.StripePayoutPage.loadData,
-    },
-    {
-      path: '/account/payments/:returnURLType',
-      name: 'StripePayoutOnboardingPage',
-      auth: true,
-      authPage: 'LoginPage',
-      component: StripePayoutPage,
-      loadData: pageDataLoadingAPI.StripePayoutPage.loadData,
-    },
-    {
-      path: '/account/payment-methods',
-      name: 'PaymentMethodsPage',
-      auth: true,
-      authPage: 'LoginPage',
-      component: PaymentMethodsPage,
-      loadData: pageDataLoadingAPI.PaymentMethodsPage.loadData,
     },
     {
       path: '/terms-of-service',

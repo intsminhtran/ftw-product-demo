@@ -8,10 +8,8 @@ import { loadData as EmailVerificationPageLoader } from './EmailVerificationPage
 import { loadData as InboxPageLoader } from './InboxPage/InboxPage.duck';
 import { loadData as ListingPageLoader } from './ListingPage/ListingPage.duck';
 import { loadData as ManageListingsPageLoader } from './ManageListingsPage/ManageListingsPage.duck';
-import { loadData as PaymentMethodsPageLoader } from './PaymentMethodsPage/PaymentMethodsPage.duck';
 import { loadData as ProfilePageLoader } from './ProfilePage/ProfilePage.duck';
 import { loadData as SearchPageLoader } from './SearchPage/SearchPage.duck';
-import { loadData as StripePayoutPageLoader } from './StripePayoutPage/StripePayoutPage.duck';
 import {
   loadData as TransactionPageLoader,
   setInitialValues as TransactionPageInitialValues,
@@ -40,17 +38,11 @@ const getPageDataLoadingAPI = () => {
     ManageListingsPage: {
       loadData: ManageListingsPageLoader,
     },
-    PaymentMethodsPage: {
-      loadData: PaymentMethodsPageLoader,
-    },
     ProfilePage: {
       loadData: ProfilePageLoader,
     },
     SearchPage: {
       loadData: SearchPageLoader,
-    },
-    StripePayoutPage: {
-      loadData: StripePayoutPageLoader,
     },
     TransactionPage: {
       loadData: TransactionPageLoader,
